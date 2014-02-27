@@ -19,7 +19,7 @@
         return NSOrderedAscending;
     else if([self length] > [string length])
         return NSOrderedDescending;
-    else
+    else    //alphabetic if same length
         return [self caseInsensitiveCompare:string];
 }
 @end
@@ -31,6 +31,10 @@
  Range finding options
  */
 @property NSStringCompareOptions options;
+/**
+ Internal dictionary containing graph of keys
+ */
+@property (nonatomic, strong) NSDictionary * suggestions;
 
 @end
 
@@ -68,10 +72,6 @@
 }
 
 -(NSMutableDictionary*)recursiveDictionarySort:(NSMutableDictionary*)wordDict{
-    
-    //sorted dictionary
-    NSMutableDictionary * dict = [NSMutableDictionary new];
-    
     //for each word, add to top level dictionary if key is substring or create new dictionary
     
     NSArray * wordArray = [[wordDict allKeys] sortedArrayUsingSelector:@selector(lengthCompare:)];
@@ -124,10 +124,13 @@
 
 -(NSArray*)listSuggestions:(NSString*)word{
     
-    if(_orderByShortestPossibility)
-        return [[self listSuggestions:word withDictionary:_suggestions] sortedArrayUsingSelector:@selector(lengthCompare:)];
-    else
-        return [[self listSuggestions:word withDictionary:_suggestions] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    if([self isPotential:word]){
+        if(_orderByShortestPossibility)
+            return [[self listSuggestions:word withDictionary:_suggestions] sortedArrayUsingSelector:@selector(lengthCompare:)];
+        else
+            return [[self listSuggestions:word withDictionary:_suggestions] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    }
+    return nil;
 }
 
 -(NSArray*)listSuggestions:(NSString*)word withDictionary:(NSDictionary*)wordDict{
@@ -191,6 +194,7 @@
 }
 
 -(BOOL)containsExact:(NSString*)word withDict:(NSDictionary*)wordDict{
+    //determine if graph contains exact word
     
     __block NSString * subKey;
     __block NSDictionary * subDict = nil;

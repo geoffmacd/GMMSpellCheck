@@ -10,7 +10,6 @@
 
 @interface GMMSpellCheck : NSObject
 
-@property (nonatomic, strong) NSDictionary * suggestions;
 
 /**
  Minimum length before triggering auto-complete. 2 letters by default
