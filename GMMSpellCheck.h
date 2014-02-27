@@ -50,7 +50,12 @@
  @return Yes if dictionary contains exact match
  */
 -(BOOL)containsExact:(NSString*)word;
-
+/**
+ Find exact spelling for word
+ @param word word to check for exact match
+ @return exact case sensitive word
+ */
+-(NSString*)exactWord:(NSString*)word;
 
 -(void)setup;
 

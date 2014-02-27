@@ -234,4 +234,41 @@
     return NO;
 }
 
+
+-(NSString*)exactWord:(NSString*)word{
+    return [self exactWord:word withDict:_suggestions];
+}
+
+-(NSString*)exactWord:(NSString*)word withDict:(NSDictionary*)wordDict{
+    //determine if graph contains exact word
+    
+    __block NSString * subKey;
+    __block NSDictionary * subDict = nil;
+    
+    [wordDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        
+        NSString * keyStr = (NSString*)key;
+        if([keyStr isEqualToString:word insensitive:_caseInsensitive]){
+            subKey = keyStr;
+            *stop = YES;
+        } else {
+            
+            NSRange keyRange = [keyStr rangeOfString:word options:_options];
+            if(keyRange.location != NSNotFound){
+                
+                subDict = (NSDictionary *)obj;
+                subKey = word;
+                //recursive with subdirectory
+                *stop = YES;
+            }
+        }
+    }];
+    
+    if(subKey && subDict == nil)
+        return subKey;
+    else if(subKey && subDict)
+        return [self exactWord:subKey withDict:subDict];
+    return nil;
+}
+
 @end

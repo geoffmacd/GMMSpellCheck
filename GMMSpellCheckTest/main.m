@@ -30,8 +30,10 @@ int main(int argc, const char * argv[])
             NSString * word = [NSString stringWithCString:str encoding:NSStringEncodingConversionAllowLossy];
             NSArray * suggestions = [test listSuggestions:word];
             if([suggestions count]){
-                if([test containsExact:word])
-                    NSLog(@"Contains Exact Match!");
+                if([test containsExact:word]){
+                    NSString * exact = [test exactWord:word];
+                    NSLog(@"Contains Exact Match: %@", exact);
+                }
                 NSLog(@"Suggestions....");
                 [suggestions enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     NSLog(@"    %@",obj);
