@@ -10,6 +10,7 @@
 
 @interface NSString(NSStringGMMAddition)
 - (NSComparisonResult)lengthCompare:(NSString *)string;
+-(BOOL)isEqualToString:(NSString *)aString insensitive:(BOOL)insensitive;
 @end
 
 @implementation NSString(NSStringGMMAddition)
@@ -22,6 +23,15 @@
     else    //alphabetic if same length
         return [self caseInsensitiveCompare:string];
 }
+
+-(BOOL)isEqualToString:(NSString *)aString insensitive:(BOOL)insensitive{
+    
+    if(insensitive){
+        return [[self lowercaseString] isEqualToString:[aString lowercaseString]];
+    } else
+        return [self isEqualToString:aString];
+}
+
 @end
 
 
@@ -171,7 +181,7 @@
             //equal
             
             //add key directly
-            if([key isEqualToString:word])
+            if([key isEqualToString:word insensitive:_caseInsensitive])
                 [wordArray addObject:key];
             
             //add recursive words for this key as well
@@ -202,7 +212,7 @@
     [wordDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         
         NSString * keyStr = (NSString*)key;
-        if([keyStr isEqualToString:word]){
+        if([keyStr isEqualToString:word insensitive:_caseInsensitive]){
             subKey = keyStr;
             *stop = YES;
         } else {
