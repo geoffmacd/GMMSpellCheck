@@ -78,7 +78,7 @@
     NSMutableDictionary * wordDict = [NSMutableDictionary dictionaryWithObjects:objArray forKeys:words];
     
     _suggestions = [self recursiveDictionarySort:wordDict];
-    NSLog(@"%@", [_suggestions description]);
+//    NSLog(@"%@", [_suggestions description]);
 }
 
 -(NSMutableDictionary*)recursiveDictionarySort:(NSMutableDictionary*)wordDict{
@@ -88,7 +88,6 @@
     
     [wordArray enumerateObjectsUsingBlock:^(id topWord, NSUInteger idx, BOOL *stop) {
         
-        NSLog(@"%@",topWord);
         __block NSMutableDictionary * topDict = wordDict[topWord];
         
         //find substring match ordered by shortest key
